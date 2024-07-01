@@ -6,6 +6,7 @@ const getSite = async () => {
     headers: {
       Authorization: `Bearer ${process.env.NETLIFY_TOKEN}`,
     },
+    cache: 'no-store',
   })
   const data = await response.json()
   return data
@@ -16,6 +17,7 @@ export const getDeploys = async () => {
     headers: {
       Authorization: `Bearer ${process.env.NETLIFY_TOKEN}`,
     },
+    cache: 'no-store',
   })
   const data = await response.json()
   return data
@@ -30,5 +32,3 @@ export default async function Home() {
     </main>
   )
 }
-
-export const dynamic = 'force-dynamic'
