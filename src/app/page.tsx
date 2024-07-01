@@ -1,12 +1,34 @@
-export default function Home() {
+import Branchs from '@/components/branchs'
+import Deploys from '@/components/deploys'
+
+const getSite = async () => {
+  const response = await fetch(`https://api.netlify.com/api/v1/sites/${process.env.NETLIFY_SITE_ID}`, {
+    headers: {
+      Authorization: `Bearer ${process.env.NETLIFY_TOKEN}`,
+    },
+  })
+  const data = await response.json()
+  return data
+}
+
+export const getDeploys = async () => {
+  const response = await fetch(`https://api.netlify.com/api/v1/sites/${process.env.NETLIFY_SITE_ID}/deploys`, {
+    headers: {
+      Authorization: `Bearer ${process.env.NETLIFY_TOKEN}`,
+    },
+  })
+  const data = await response.json()
+  return data
+}
+
+export default async function Home() {
+  const [site, deploys] = await Promise.all([getSite(), getDeploys()])
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-24'>
-      <h2 className='text-4xl font-bold'>Main</h2>
-      <iframe src='https://qiplim.netlify.app/'></iframe>
-      <h2 className='text-4xl font-bold'>Stage</h2>
-      <iframe src='https://stage--qiplim.netlify.app/'></iframe>
-      <h2 className='text-4xl font-bold'>Develop</h2>
-      <iframe src='https://develop--qiplim.netlify.app/'></iframe>
+    <main className='max-w-screen flex min-h-screen flex-col gap-8 p-8'>
+      <Branchs data={site} />
+      <Deploys data={deploys} />
     </main>
   )
 }
+
+export const dynamic = 'force-dynamic'
